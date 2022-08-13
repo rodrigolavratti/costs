@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -68,3 +69,12 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+=======
+# costs
+Sistema desenvolvido em React<br>
+Pacotes e dependências:<br>
+    json-server —> é um backend “fake” (para fazer requisição com a API, resgatar dados<br>
+    react-icons —> icons<br>
+    react-router-dom —> pacote react para as rotas e links<br>
+    uuid —> Trabalhar com id ao longo do projeto.
+>>>>>>> 9ae4902cda4ad6ffe1e4c0bc7666f6f42af9f1cb
