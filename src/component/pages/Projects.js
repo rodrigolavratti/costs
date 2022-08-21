@@ -5,12 +5,15 @@ import Message from "../layout/Message"
 import Container from "../layout/Container"
 import LinkButton from "../layout/LinkButton"
 import ProjectCard from '../project/ProjectCard'
+import Loading from '../layout/Loading'
 
 import styles from './Projects.module.css'
 
 function Projects() {
 
     const [projects, setProjects] = useState([])
+    const [removeLoader, setRemoveLoader] = useState(false)
+
     useEffect(() => {
         fetch('http://localhost:5000/projects', {
             method: 'GET',
@@ -21,6 +24,7 @@ function Projects() {
         .then((resp) => resp.json())
         .then((data) => {
             setProjects(data)
+            setRemoveLoader(true)
         })
         .catch((err) => console.log(err))
     }, [])
@@ -52,6 +56,12 @@ function Projects() {
                         />
                     ))
                 }
+                {!removeLoader && <Loading />}
+                {/* Abaixo um exemplo para quando não houver projetos,
+                    a condição fica a seguinte: se o loader estiver ativo e não houver projetos, apresenta uma mensagem */}
+                {removeLoader && projects.length === 0 && (
+                    <p>Não há projetos cadastrados!</p>
+                )}
             </Container>
         </div>
     )
