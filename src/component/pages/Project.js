@@ -9,6 +9,7 @@ import Container from '../layout/Container'
 import ProjectForm from '../project/ProjectForm'
 import Message from '../layout/Message'
 import ServiceForm from '../service/ServiceForm'
+import ServiceCard from '../service/ServiceCard'
 
 function Project() {
     
@@ -18,6 +19,7 @@ function Project() {
     const [message, setMessage] = useState()
     const [type, setType] = useState()
     const [showServiceForm, setShowServiceForm] = useState(false)
+    const [services, setServices] = useState([])
     
     useEffect(() => {
         setTimeout(() => {
@@ -30,6 +32,7 @@ function Project() {
             .then((resp) => resp.json())
             .then((data) => {
                 setProject(data)
+                setServices(data.services)
             })
             .catch((err) => console.log(err))
         }, 300)
@@ -91,8 +94,7 @@ function Project() {
         })
         .then((resp) => resp.json())
         .then((data) => {
-            //exibir os serviços
-            console.log(data)
+            setShowServiceForm(false)
         })
         .catch((err) => console.log(err))
 
@@ -104,6 +106,33 @@ function Project() {
 
     function toggleServiceForm() {
         setShowServiceForm(!showServiceForm)
+    }
+
+    function removeService(id, cost) {
+        const servicesUpdate = project.services.filter (
+            (service) => service.id !== id
+        )
+
+        const projectUpdate = project
+
+        projectUpdate.services = servicesUpdate
+        projectUpdate.cost = parseFloat(projectUpdate.cost) - parseFloat(cost)
+
+        fetch(`http://localhost:5000/projects/${projectUpdate.id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(projectUpdate)
+        })
+        .then((resp) => resp.json())
+        .then((data) => {
+            setProject(projectUpdate)
+            setServices(servicesUpdate)
+            setMessage('Serviço removido com sucesso!!!')
+            setType('success')
+        })
+        .catch((err) => console.log(err))
     }
 
     return (
@@ -152,7 +181,19 @@ function Project() {
                         </div>
                         <h2>Serviços</h2>
                         <Container customClass="start">
-                            <p>Itens de serviços</p>
+                            {services.length > 0 &&
+                                services.map((service) => (
+                                    <ServiceCard 
+                                        id={service.id}
+                                        name={service.name}
+                                        cost={service.cost}
+                                        description={service.description}
+                                        key={service.id}
+                                        handleRemove={removeService}
+                                    />
+                                ))
+                            }
+                            {services.length === 0 && <p>Não há serviços cadastrados.</p>}
                         </Container>
                     </Container>
                 </div>
